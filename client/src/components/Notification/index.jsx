@@ -1,6 +1,5 @@
 import { Alert, AlertTitle, Snackbar } from '@mui/material';
-
-import { useNotification } from '../../app/hooks';
+import { useNotification } from '../../hooks';
 
 export default function Notification() {
   const { notification, closeNotification } = useNotification();
@@ -14,7 +13,6 @@ export default function Notification() {
   if (notification === null) return null;
   return (
     <Snackbar open onClose={handleClose} autoHideDuration={notification.timeOut}>
-      {/* @ts-ignore */}
       <Alert onClose={handleClose} severity={notification.type}>
         <AlertTitle>{notification.title}</AlertTitle>
         {notification.description}

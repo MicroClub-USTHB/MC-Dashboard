@@ -7,6 +7,8 @@ import { Box, Divider, Typography, Stack, MenuItem, Avatar, IconButton } from '@
 import MenuPopover from '../../components/MenuPopover';
 // mocks_
 import account from '../../_mock/account';
+import { useUser, useNotification } from '../../hooks';
+import { useLogOutMutation } from '../../app/backend';
 
 // ----------------------------------------------------------------------
 
@@ -40,6 +42,26 @@ export default function AccountPopover() {
   };
 
   const handleClose = () => {
+    setOpen(null);
+  };
+
+  const [logout] = useLogOutMutation();
+  const { Notify } = useNotification();
+  const { user, removeUser } = useUser();
+  const handleLogout = () => {
+    logout()
+      .unwrap()
+      .then(() => {
+        Notify({
+          title: 'Logged out',
+          description: 'You have logged out',
+          type: 'success',
+        });
+        removeUser();
+      })
+      .catch((e) => {
+        console.error(e);
+      });
     setOpen(null);
   };
 
@@ -101,7 +123,7 @@ export default function AccountPopover() {
 
         <Divider sx={{ borderStyle: 'dashed' }} />
 
-        <MenuItem onClick={handleClose} sx={{ m: 1 }}>
+        <MenuItem onClick={handleLogout} sx={{ m: 1 }}>
           Logout
         </MenuItem>
       </MenuPopover>

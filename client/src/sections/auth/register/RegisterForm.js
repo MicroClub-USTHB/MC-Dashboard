@@ -1,20 +1,21 @@
 import * as Yup from 'yup';
 import { useState } from 'react';
 import { useFormik, Form, FormikProvider } from 'formik';
-import { useNavigate } from 'react-router-dom';
 // material
 import { Stack, TextField, IconButton, InputAdornment } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 // component
 import Iconify from '../../../components/Iconify';
+import { useSignUpMutation } from '../../../app/backend';
+import { useNotification, useUser } from '../../../hooks';
 
 // ----------------------------------------------------------------------
 
 export default function RegisterForm() {
-  const navigate = useNavigate();
-
   const [showPassword, setShowPassword] = useState(false);
-
+  const [SignUp, { isLoading }] = useSignUpMutation();
+  const { setUser } = useUser();
+  const { Notify, Errofy } = useNotification();
   const RegisterSchema = Yup.object().shape({
     firstName: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('First name required'),
     lastName: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('Last name required'),
@@ -30,12 +31,22 @@ export default function RegisterForm() {
       password: '',
     },
     validationSchema: RegisterSchema,
-    onSubmit: () => {
-      navigate('/dashboard', { replace: true });
+    onSubmit: (body) => {
+      SignUp({ body })
+        .unwrap()
+        .then((user) => {
+          Notify({
+            title: 'You have Registered in the platform',
+            description: 'Welcome among us! you can check the dashboard for news',
+            type: 'success',
+          });
+          setUser(user);
+        })
+        .catch((e) => Errofy(e));
     },
   });
 
-  const { errors, touched, handleSubmit, isSubmitting, getFieldProps } = formik;
+  const { errors, touched, handleSubmit, getFieldProps } = formik;
 
   return (
     <FormikProvider value={formik}>
@@ -88,7 +99,7 @@ export default function RegisterForm() {
             helperText={touched.password && errors.password}
           />
 
-          <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isSubmitting}>
+          <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isLoading}>
             Register
           </LoadingButton>
         </Stack>

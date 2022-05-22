@@ -3,13 +3,13 @@ import { Helmet } from 'react-helmet-async';
 import { forwardRef } from 'react';
 // @mui
 import { Box } from '@mui/material';
-
+import webconfig from '../webconfig.json';
 // ----------------------------------------------------------------------
 
 const Page = forwardRef(({ children, title = '', meta, ...other }, ref) => (
   <>
     <Helmet>
-      <title>{`${title} | Minimal-UI`}</title>
+      <title>{`${title} | ${webconfig.DashboardName}`}</title>
       {meta}
     </Helmet>
 

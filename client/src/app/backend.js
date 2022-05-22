@@ -1,9 +1,10 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import webconfig from '../webconfig.json';
 
 const Api = createApi({
   reducerPath: 'api',
   baseQuery: fetchBaseQuery({
-    baseUrl: 'http://localhost:3002/',
+    baseUrl: webconfig.BackUrl,
     credentials: 'include',
   }),
   endpoints: (builder) => ({
@@ -24,21 +25,6 @@ const Api = createApi({
         body,
       }),
     }),
-    cSignIn: builder.mutation({
-      query: ({ body }) => ({
-        url: '/cAuth/signin',
-        method: 'POST',
-        body,
-      }),
-    }),
-    /* Sign Up / Register */
-    cSignUp: builder.mutation({
-      query: ({ body }) => ({
-        url: '/cAuth/signup',
-        method: 'POST',
-        body,
-      }),
-    }),
     /* Log out */
     logOut: builder.mutation({
       query: () => ({
@@ -54,10 +40,6 @@ const Api = createApi({
     editUser: builder.mutation({
       query: (body) => ({ url: '/user', method: 'PUT', body }),
     }),
-    /* Terra Data */
-    syncTerra: builder.mutation({
-      query: () => ({ url: '/terra/sync', method: 'GET' }),
-    }),
   }),
 });
 
@@ -68,9 +50,5 @@ export const {
   useLogOutMutation,
   useGetUserDataMutation,
   useEditUserMutation,
-  useCSignInMutation,
-  useCSignUpMutation,
-  // terra
-  useSyncTerraMutation,
 } = Api;
 export default Api;

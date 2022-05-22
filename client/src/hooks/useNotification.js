@@ -1,23 +1,7 @@
-import { useDispatch, useSelector } from 'react-redux';
+import { removeNotification, setNotification } from '../app/slices/notification';
+import { useAppDispatch, useAppSelector } from '../app/store';
 
-import { removeNotification, setNotification } from './slices/notification';
-import { removeUser, setUser } from './slices/user';
-// Use throughout your app instead of plain `useDispatch` and `useSelector`
-export const useAppDispatch = () => useDispatch();
-export const useAppSelector = useSelector;
-
-export const useUser = () => {
-  const dispatch = useAppDispatch();
-  const user = useAppSelector((state) => state.user);
-  const set = (user) => {
-    dispatch(setUser(user));
-  };
-  const remove = () => {
-    dispatch(removeUser());
-  };
-  return { setUser: set, user, removeUser: remove };
-};
-export const useNotification = () => {
+export default function useNotification() {
   const dispatch = useAppDispatch();
   const notification = useAppSelector((state) => state.notification);
   const set = ({ title, description, type, timeOut = 10000 }) => {
@@ -45,4 +29,4 @@ export const useNotification = () => {
     dispatch(removeNotification());
   };
   return { Notify: set, notification, closeNotification, Errofy: error };
-};
+}
