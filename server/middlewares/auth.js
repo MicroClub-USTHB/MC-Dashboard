@@ -6,7 +6,6 @@ const loggedIn = async (req, res, next) => {
 };
 const checkLogs = async (req, res, next) => {
     const { token } = req.cookies;
-    console.log(token);
     req.user = null;
     if (token) {
         const decoded = jwt.verify(token, process.env.BACK_SECRET);

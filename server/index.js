@@ -29,13 +29,13 @@ app.use(
         credentials: true,
     })
 );
-app.use(function (req, res, next) {
+/*app.use(function (req, res, next) {
     const t = Date.now();
     next();
     console.log(
         req.method + "/ " + res.statusCode + " " + (Date.now() - t) + "ms"
     );
-});
+});*/
 app.route("/").get(checkLogs, loggedIn, GetLoggedInUserInfos);
 app.use("/", authRoutes);
 app.use("/user", userRoutes);
